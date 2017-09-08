@@ -42,7 +42,8 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
         binding.editor.setOnTextChangeListener(new BGEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
-                int wordCount = text.trim().split("\\s+").length;
+                String htmlText=android.text.Html.fromHtml(text).toString();
+                int wordCount = htmlText.trim().split("\\s+").length;
                 binding.tvWordCounter.setText(wordCountWithText(wordCount));
             }
         });
