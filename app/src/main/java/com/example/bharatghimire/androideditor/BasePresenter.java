@@ -5,5 +5,4 @@ package com.example.bharatghimire.androideditor;
  */
 
 public interface BasePresenter {
-    void start();
 }

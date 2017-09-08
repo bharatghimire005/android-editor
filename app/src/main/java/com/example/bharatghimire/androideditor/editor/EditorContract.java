@@ -14,6 +14,6 @@ public interface EditorContract {
     }
 
     interface Presenter extends BasePresenter {
-
+        void saveData(String html);
     }
 }
