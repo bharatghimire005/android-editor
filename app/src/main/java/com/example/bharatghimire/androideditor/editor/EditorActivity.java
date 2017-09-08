@@ -12,9 +12,11 @@ import com.example.bharatghimire.androideditor.R;
 import com.example.bharatghimire.androideditor.customComponent.BGEditor;
 import com.example.bharatghimire.androideditor.databinding.ActivityEditor2Binding;
 import com.example.bharatghimire.androideditor.displayhtml.DisplayHtmlActivity;
+import com.example.bharatghimire.androideditor.repository.local.DatabaseLoader;
 import com.example.bharatghimire.androideditor.repository.local.DatabaseQueries;
 
 public class EditorActivity extends AppCompatActivity implements EditorContract.View {
+    private static final int LOADER_SCHEDULAR = 1;
     private Activity activity = this;
     private ActivityEditor2Binding binding;
     private static final String TAG = "EditorActivity";
@@ -25,7 +27,9 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(activity, R.layout.activity_editor2);
-        editorPresenter = new EditorPresenter(new DatabaseQueries(activity), this);
+        DatabaseLoader databaseLoader = new DatabaseLoader(activity);
+        getLoaderManager().initLoader(LOADER_SCHEDULAR, null, databaseLoader);
+        editorPresenter = new EditorPresenter(databaseLoader, new DatabaseQueries(activity), this);
         binding.editor.setEditorFontSize(22);
         binding.editor.setEditorFontColor(Color.BLACK);
         binding.editor.setPadding(10, 10, 10, 10);
@@ -42,7 +46,7 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
         binding.editor.setOnTextChangeListener(new BGEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
-                String htmlText=android.text.Html.fromHtml(text).toString();
+                String htmlText = android.text.Html.fromHtml(text).toString();
                 int wordCount = htmlText.trim().split("\\s+").length;
                 binding.tvWordCounter.setText(wordCountWithText(wordCount));
             }

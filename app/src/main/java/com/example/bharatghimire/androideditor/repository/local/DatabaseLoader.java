@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 public class DatabaseLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     private Context context;
+    private RepositoryCallBack repositoryCallBack;
 
     public DatabaseLoader(Context context) {
         this.context = context;
@@ -31,10 +32,15 @@ public class DatabaseLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        repositoryCallBack.success(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public void callBack(RepositoryCallBack repositoryCallBack) {
+        this.repositoryCallBack = repositoryCallBack;
     }
 }

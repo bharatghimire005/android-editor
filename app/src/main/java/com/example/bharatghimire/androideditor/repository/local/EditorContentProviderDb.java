@@ -68,6 +68,7 @@ public class EditorContentProviderDb extends ContentProvider {
         }
         Cursor cursor = queryBuilder.query(sqLiteDatabase, projection, selection,
                 selectionArgs, null, null, sortOrder);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
