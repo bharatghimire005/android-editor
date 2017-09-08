@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AndroidEditor</string>
+    <string name="label_insert_text">Insert text here...</string>
+    <string name="label_save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="label_word">word</string>
+    <string name="label_words">words</string>
+</resources>
