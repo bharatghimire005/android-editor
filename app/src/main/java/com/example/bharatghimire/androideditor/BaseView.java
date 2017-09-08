@@ -4,8 +4,7 @@ package com.example.bharatghimire.androideditor;
  * Created by bharatghimire on 26/2/17.
  */
 
-public interface BaseView<T> {
-    void setPresenter(T presenter);
+public interface BaseView {
 
     void displayMessage(String message);
 

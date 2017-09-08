@@ -17,6 +17,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".displayhtml.DisplayHtmlActivity"></activity>
+
+        <provider
+            android:name=".repository.local.EditorContentProviderDb"
+            android:authorities="com.example.bharatghimire.androideditor"
+            android:exported="true"
+            android:readPermission="true"
+            android:writePermission="true" />
     </application>
 
 </manifest>

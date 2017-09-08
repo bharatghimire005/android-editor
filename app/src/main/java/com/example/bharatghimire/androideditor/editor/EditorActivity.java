@@ -12,16 +12,20 @@ import com.example.bharatghimire.androideditor.R;
 import com.example.bharatghimire.androideditor.customComponent.BGEditor;
 import com.example.bharatghimire.androideditor.databinding.ActivityEditor2Binding;
 import com.example.bharatghimire.androideditor.displayhtml.DisplayHtmlActivity;
+import com.example.bharatghimire.androideditor.repository.local.DatabaseQueries;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements EditorContract.View {
     private Activity activity = this;
     private ActivityEditor2Binding binding;
     private static final String TAG = "EditorActivity";
+    private EditorPresenter editorPresenter;
+    private int id = Integer.MAX_VALUE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(activity, R.layout.activity_editor2);
+        editorPresenter = new EditorPresenter(new DatabaseQueries(activity), this);
         binding.editor.setEditorFontSize(22);
         binding.editor.setEditorFontColor(Color.BLACK);
         binding.editor.setPadding(10, 10, 10, 10);
@@ -84,8 +88,25 @@ public class EditorActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.btn_save:
+                    editorPresenter.saveData(id, binding.editor.getHtml());
                     break;
             }
         }
     };
+
+
+    @Override
+    public void displayMessage(String message) {
+
+    }
+
+    @Override
+    public void showProgressDialog() {
+
+    }
+
+    @Override
+    public void hideProgressDialog() {
+
+    }
 }

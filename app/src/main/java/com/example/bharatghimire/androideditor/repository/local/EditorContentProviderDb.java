@@ -36,8 +36,8 @@ public class EditorContentProviderDb extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, "schedules", ALL_HTML_FILES);
-        uriMatcher.addURI(AUTHORITY, "schedules/#", SINGLE_HTML_FILE);
+        uriMatcher.addURI(AUTHORITY, "editors", ALL_HTML_FILES);
+        uriMatcher.addURI(AUTHORITY, "editors/#", SINGLE_HTML_FILE);
 
     }
 
@@ -92,7 +92,7 @@ public class EditorContentProviderDb extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case SINGLE_HTML_FILE:
                 long id = database.insert(SQLITE_TABLE, "", values);
-                if (id == -1) throw new SQLException("Error inserting data!");
+                if (id == -1) throw new SQLException();
                 result = Uri.withAppendedPath(uri, String.valueOf(id));
         }
         return result;

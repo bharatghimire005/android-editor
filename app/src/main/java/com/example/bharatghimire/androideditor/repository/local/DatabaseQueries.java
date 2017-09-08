@@ -16,9 +16,14 @@ public class DatabaseQueries {
     }
 
     public void insertData(ContentValues contentValue) {
-        ContentValues contentValues= new ContentValues();
-        Uri uri = Uri.parse(EditorContentProviderDb.CONTENT_URI+"/"+10);
-        context.getContentResolver().insert(uri, contentValues);
+        Uri uri = Uri.parse(EditorContentProviderDb.CONTENT_URI + "/" + 10);
+        context.getContentResolver().insert(uri, contentValue);
+    }
+
+    public void updateData(int id, ContentValues contentValue) {
+        ContentValues contentValues = new ContentValues();
+        Uri uri = Uri.parse(EditorContentProviderDb.CONTENT_URI + "/" + id);
+        context.getContentResolver().update(uri, contentValues, null, null);
     }
 
 }

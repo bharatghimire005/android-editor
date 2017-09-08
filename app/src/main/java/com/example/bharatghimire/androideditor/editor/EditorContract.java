@@ -10,10 +10,10 @@ import com.example.bharatghimire.androideditor.BaseView;
 
 public interface EditorContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
     }
 
     interface Presenter extends BasePresenter {
-        void saveData(String html);
+        void saveData(int id, String html);
     }
 }
