@@ -28,7 +28,8 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
     private EditorPresenter editorPresenter;
     private int id = Integer.MAX_VALUE;
     private Snackbar snackbar;
-
+    private boolean isblockquote = false;
+    private boolean isBullet = false;
     SharedPreferences sharedpreferences;
 
     @Override
@@ -50,6 +51,7 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
         binding.layoutEditorToolbar.actionRight.setOnClickListener(onClickListener);
         binding.layoutEditorToolbar.actionCenter.setOnClickListener(onClickListener);
         binding.layoutEditorToolbar.actionBullet.setOnClickListener(onClickListener);
+        binding.layoutEditorToolbar.actionQuote.setOnClickListener(onClickListener);
         binding.btnSubmit.setOnClickListener(onClickListener);
         binding.btnSave.setOnClickListener(onClickListener);
         binding.editor.setOnTextChangeListener(new BGEditor.OnTextChangeListener() {
@@ -95,7 +97,16 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                     binding.editor.setAlignCenter();
                     break;
                 case R.id.action_bullet:
-                    binding.editor.setBullets();
+                    if (!isblockquote) {
+                        binding.editor.setBullets();
+                        isBullet = !isBullet;
+                    }
+                    break;
+                case R.id.action_quote:
+                    if (!isBullet) {
+                        binding.editor.setBlockquote();
+                        isblockquote = !isblockquote;
+                    }
                     break;
                 case R.id.btn_submit:
                     if (binding.editor != null && !binding.editor.getHtml().isEmpty()) {
@@ -109,7 +120,7 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                     break;
                 case R.id.btn_save:
                     if (binding.editor != null && !binding.editor.getHtml().isEmpty()) {
-                        editorPresenter.saveData(id, binding.editor.getHtml(),EditorPresenter.FROM_SAVE_BUTTON);
+                        editorPresenter.saveData(id, binding.editor.getHtml(), EditorPresenter.FROM_SAVE_BUTTON);
                     } else {
                         Snackbar.make(binding.clParent, R.string.msg_nothing_save, Snackbar.LENGTH_LONG).show();
                     }

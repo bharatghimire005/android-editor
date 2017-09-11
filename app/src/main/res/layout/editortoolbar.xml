@@ -81,6 +81,15 @@
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
                 android:src="@drawable/ic_bulleted" />
+            <ImageButton
+                android:id="@+id/action_quote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:src="@drawable/ic_quote" />
         </LinearLayout>
     </HorizontalScrollView>
 </layout>
