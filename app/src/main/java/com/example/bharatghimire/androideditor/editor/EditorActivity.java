@@ -1,10 +1,13 @@
 package com.example.bharatghimire.androideditor.editor;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -17,17 +20,23 @@ import com.example.bharatghimire.androideditor.repository.local.DatabaseQueries;
 
 public class EditorActivity extends AppCompatActivity implements EditorContract.View {
     private static final int LOADER_SCHEDULAR = 1;
+    public static final String SaveData = "saveData";
+    public static final String MyPREFERENCES = "MyPrefs";
     private Activity activity = this;
     private ActivityEditor2Binding binding;
     private static final String TAG = "EditorActivity";
     private EditorPresenter editorPresenter;
     private int id = Integer.MAX_VALUE;
+    private Snackbar snackbar;
+
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(activity, R.layout.activity_editor2);
         DatabaseLoader databaseLoader = new DatabaseLoader(activity);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         getLoaderManager().initLoader(LOADER_SCHEDULAR, null, databaseLoader);
         editorPresenter = new EditorPresenter(databaseLoader, new DatabaseQueries(activity), this);
         binding.editor.setEditorFontSize(22);
@@ -51,6 +60,7 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                 binding.tvWordCounter.setText(wordCountWithText(wordCount));
             }
         });
+        setData();
     }
 
     private String wordCountWithText(int wordCount) {
@@ -88,12 +98,21 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                     binding.editor.setBullets();
                     break;
                 case R.id.btn_submit:
-                    Intent intent = new Intent(activity, DisplayHtmlActivity.class);
-                    intent.putExtra(DisplayHtmlActivity.EXTRA_HTML, binding.editor.getHtml());
-                    startActivity(intent);
+                    if (binding.editor != null && !binding.editor.getHtml().isEmpty()) {
+                        Intent intent = new Intent(activity, DisplayHtmlActivity.class);
+                        intent.putExtra(DisplayHtmlActivity.EXTRA_HTML, binding.editor.getHtml());
+                        startActivity(intent);
+                    } else {
+                        Snackbar.make(binding.clParent, R.string.msg_nothing_to_show, Snackbar.LENGTH_LONG).show();
+                    }
+
                     break;
                 case R.id.btn_save:
-                    editorPresenter.saveData(id, binding.editor.getHtml());
+                    if (binding.editor != null && !binding.editor.getHtml().isEmpty()) {
+                        editorPresenter.saveData(id, binding.editor.getHtml(),EditorPresenter.FROM_SAVE_BUTTON);
+                    } else {
+                        Snackbar.make(binding.clParent, R.string.msg_nothing_save, Snackbar.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
@@ -101,8 +120,19 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
 
 
     @Override
-    public void displayMessage(String message) {
+    public void displayMessage() {
+        binding.editor.setHtml("");
+        saveData("");
+        binding.tvWordCounter.setText(wordCountWithText(0));
+        snackbar = Snackbar
+                .make(binding.clParent, getString(R.string.msg_saved), Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
 
+        snackbar.show();
     }
 
     @Override
@@ -113,5 +143,24 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
     @Override
     public void hideProgressDialog() {
 
+    }
+
+    private void setData() {
+        String saveddata = sharedpreferences.getString(SaveData, "");
+        binding.editor.setHtml(saveddata);
+    }
+
+    private void saveData(String data) {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(SaveData, data);
+        editor.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (!binding.editor.getHtml().isEmpty()) {
+            saveData(binding.editor.getHtml());
+        }
+        super.onDestroy();
     }
 }

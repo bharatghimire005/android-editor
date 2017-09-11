@@ -5,4 +5,7 @@
     <string name="submit">Submit</string>
     <string name="label_word">word</string>
     <string name="label_words">words</string>
+    <string name="msg_saved">Your data is saved</string>
+    <string name="msg_nothing_save">Nothing to save</string>
+    <string name="msg_nothing_to_show">Nothing to show</string>
 </resources>

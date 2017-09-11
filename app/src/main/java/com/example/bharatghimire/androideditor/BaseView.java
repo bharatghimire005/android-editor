@@ -6,7 +6,7 @@ package com.example.bharatghimire.androideditor;
 
 public interface BaseView {
 
-    void displayMessage(String message);
+    void displayMessage();
 
     void showProgressDialog();
 

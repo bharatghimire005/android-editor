@@ -2,7 +2,6 @@ package com.example.bharatghimire.androideditor.editor;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.example.bharatghimire.androideditor.repository.local.DatabaseLoader;
 import com.example.bharatghimire.androideditor.repository.local.DatabaseQueries;
@@ -19,6 +18,8 @@ public class EditorPresenter implements EditorContract.Presenter {
     private DatabaseQueries databaseQueries;
     private EditorContract.View view;
     private DatabaseLoader databaseLoader;
+    public static final int FROM_SAVE_BUTTON=111;
+    private int requestCode;
 
     public EditorPresenter(DatabaseLoader databaseLoader, DatabaseQueries databaseQueries, EditorContract.View view) {
         this.databaseQueries = databaseQueries;
@@ -32,7 +33,8 @@ public class EditorPresenter implements EditorContract.Presenter {
     }
 
     @Override
-    public void saveData(int id, String html) {
+    public void saveData(int id, String html,int requestCode) {
+        this.requestCode=requestCode;
         if (id != Integer.MAX_VALUE)
             databaseQueries.updateData(id, createContentValueToInsert(id, html));
         else {
@@ -53,14 +55,8 @@ public class EditorPresenter implements EditorContract.Presenter {
     RepositoryCallBack repositoryCallBack = new RepositoryCallBack() {
         @Override
         public void success(Cursor cursor) {
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    do {
-                        String data = cursor.getString(cursor.getColumnIndex(EditorContentProviderDb.KEY_ROWID))
-                        +cursor.getString(cursor.getColumnIndex(EditorContentProviderDb.KEY_HTML));
-                        Log.d("success", "success: "+data);
-                    } while (cursor.moveToNext());
-                }
+            if (cursor != null && requestCode==FROM_SAVE_BUTTON) {
+              view.displayMessage();
             }
         }
 
