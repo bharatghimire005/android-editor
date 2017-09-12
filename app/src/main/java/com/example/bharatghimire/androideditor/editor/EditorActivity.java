@@ -88,13 +88,19 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                     binding.editor.setUnderline();
                     break;
                 case R.id.action_left:
-                    binding.editor.setAlignLeft();
+                    if (!isblockquote) {
+                        binding.editor.setAlignLeft();
+                    }
                     break;
                 case R.id.action_right:
-                    binding.editor.setAlignRight();
+                    if (!isblockquote) {
+                        binding.editor.setAlignRight();
+                    }
                     break;
                 case R.id.action_center:
-                    binding.editor.setAlignCenter();
+                    if (!isblockquote) {
+                        binding.editor.setAlignCenter();
+                    }
                     break;
                 case R.id.action_bullet:
                     if (!isblockquote) {
@@ -121,6 +127,7 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
                 case R.id.btn_save:
                     if (binding.editor != null && !binding.editor.getHtml().isEmpty()) {
                         editorPresenter.saveData(id, binding.editor.getHtml(), EditorPresenter.FROM_SAVE_BUTTON);
+                            saveData(binding.editor.getHtml());
                     } else {
                         Snackbar.make(binding.clParent, R.string.msg_nothing_save, Snackbar.LENGTH_LONG).show();
                     }
@@ -133,7 +140,6 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
     @Override
     public void displayMessage() {
         binding.editor.setHtml("");
-        saveData("");
         binding.tvWordCounter.setText(wordCountWithText(0));
         snackbar = Snackbar
                 .make(binding.clParent, getString(R.string.msg_saved), Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
@@ -165,13 +171,5 @@ public class EditorActivity extends AppCompatActivity implements EditorContract.
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(SaveData, data);
         editor.commit();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (!binding.editor.getHtml().isEmpty()) {
-            saveData(binding.editor.getHtml());
-        }
-        super.onDestroy();
     }
 }
